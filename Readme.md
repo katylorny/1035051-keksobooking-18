@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Екатерина Филичева](https://up.htmlacademy.ru/javascript/18/user/1035051).
-* Наставник: `Неизвестно`.
+* Наставник: [Денис Выхрыстюк] (https://htmlacademy.ru/profile/id568747).
 
 ---
 
