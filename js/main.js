@@ -18,7 +18,6 @@ var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var templateMark = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
-var fragmentMark = document.createDocumentFragment();
 
 var getRandomMinMax = function (min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
@@ -31,23 +30,18 @@ var getRandomArrayElement = function (arr) {
 // выбирает случайный элемент из массива
 
 var getRandomArrayElements = function (array) {
-  // console.log(array);
   var numberOfElements = getRandomMinMax(0, array.length - 1); // сколько элементов будет
-  // console.log('количество элементов ' + numberOfElements);
   var selectedElements = []; // массив, в который поместятся все выбранные рандомные элементы
-  for (var i = 0; i < numberOfElements; i++ ) {
+  for (var i = 0; i < numberOfElements; i++) {
     var numberOfElement = getRandomMinMax(0, array.length - 1); // нашли рандомный номер элемента в массиве
-    // console.log('рандомный номер элемента ' + numberOfElement);
-    selectedElements.push(array[numberOfElement]); //запихиваем в этот массив наш новоиспеченный выбранный элемент
-    // console.log(selectedElements);
+    selectedElements.push(array[numberOfElement]); // запихиваем в этот массив наш новоиспеченный выбранный элемент
     var newArray = []; // создаем временный массив, в который поместим все элементы старого массива кроме уже выбранного :D Господи, мой мозг
     for (var j = 0; j < array.length; j++) { // перебираем все элементы в массиве
       if (j !== numberOfElement) { // отметаем выбранный элемент!
-        newArray.push(array[j])
+        newArray.push(array[j]);
       }
     }
     array = newArray;
-    // console.log(array);
   }
   return selectedElements;
 };
@@ -75,7 +69,7 @@ var createObject = function (userNumber) {
 
 var createArrayOfObjects = function (amountOfObjects) {
   var arrayOfObjects = [];
-  for (var i = 0 ; i < amountOfObjects; i++) {
+  for (var i = 0; i < amountOfObjects; i++) {
     arrayOfObjects.push(createObject(i + 1));
   }
   return arrayOfObjects;
@@ -93,6 +87,13 @@ var fillMark = function (jsObject) { // создает один дом-элем�
   return markClone;
 };
 
-mapPins.appendChild(fillMark(createObject(7)));
+var makeMarks = function (arrayMarks) {
+  var fragmentMark = document.createDocumentFragment();
+  for (var i = 0; i < arrayMarks.length; i++) {
+    fragmentMark.appendChild(fillMark(arrayMarks[i]));
+  }
+  return fragmentMark;
+};
 
 map.classList.remove('map--faded');
+mapPins.appendChild(makeMarks(offers));
