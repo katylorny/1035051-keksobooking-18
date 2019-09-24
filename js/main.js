@@ -34,7 +34,7 @@ var getRandomArrayElements = function (array) {
   var selectedElements = []; // массив, в который поместятся все выбранные рандомные элементы
   for (var i = 0; i < amountOfElements; i++) {
     var numberOfElement = getRandomMinMax(0, array.length - 1); // нашли рандомный номер элемента в массиве
-    selectedElements.push(array.splice(numberOfElement, 1)); // splice() удаляет элемент из массива, возвращает его, затем кладем его в будущий массив
+    selectedElements.push(array.splice(numberOfElement, 1)[0]); // splice() удаляет элемент из массива, возвращает его, затем кладем его в будущий массив
   }
   return selectedElements;
 };
@@ -60,7 +60,7 @@ var createOffer = function (userNumber) {
   return newObject;
 };
 
-var createArrayOfOffers = function (amountOfObjects) {
+var createOffers = function (amountOfObjects) {
   var arrayOfObjects = [];
   for (var i = 0; i < amountOfObjects; i++) {
     arrayOfObjects.push(createOffer(i + 1));
@@ -69,7 +69,7 @@ var createArrayOfOffers = function (amountOfObjects) {
 };
 // создает массив из объектов
 
-var offers = createArrayOfOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
+var offers = createOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
 
 
 var fillMark = function (markObject) { // создает один дом-элемент - метку
@@ -90,3 +90,46 @@ var makeMarks = function (arrayMarks) {
 
 map.classList.remove('map--faded');
 mapPins.appendChild(makeMarks(offers));
+
+// --------------------------  module3-task3  -----------------------------
+// СЮДА СМОТРЕТЬ ПОКА НЕ НАДО, ДЕНИС!
+
+// var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+// var filtersContainer = document.querySelector('.map__filters-container');
+//
+// var fillCard = function (cardObject) { // создает один элемент - карточку
+//   var cardClone = templateCard.cloneNode(true);
+//   cardClone.children[2].textContent = cardObject.offer.title;
+//   cardClone.children[3].textContent = cardObject.offer.address;
+//   cardClone.children[4].textContent = cardObject.offer.price + '₽/ночь';
+//
+//   if (cardObject.offer.type === 'flat') {
+//     cardClone.children[5].textContent = 'Квартира';
+//   }
+//   if (cardObject.offer.type === 'bungalo') {
+//     cardClone.children[5].textContent = 'Бунгало';
+//   }
+//   if (cardObject.offer.type === 'house') {
+//     cardClone.children[5].textContent = 'Дом';
+//   }
+//   if (cardObject.offer.type === 'palace') {
+//     cardClone.children[5].textContent = 'Дворец';
+//   }
+//
+//   cardClone.children[6].textContent = cardObject.offer.rooms + 'комнаты для ' + cardObject.offer.guests + ' гостей';
+//   cardClone.children[7].textContent = 'Заезд после ' + cardObject.offer.checkin + ', выезд до ' + cardObject.offer.checkout;
+//   // cardClone.children[8]. НЕ ЗНАЮ, КАК ТУТ ДЕЛАТЬ, ЦИКЛ, НАВЕРНОЕ
+//   cardClone.children[9].textContent = cardObject.offer.description;
+//   for (var i = 0; i < cardObject.offer.features.length - 1; i++) {
+//     cardClone.children[10].children[i].textContent = cardObject.offer.features[i];
+//   }
+//   cardClone.children[0].src = cardObject.author.avatar;
+//   return cardClone;
+// };
+//
+// // var o = createOffer(1);
+//
+// var faaa = fillCard(createOffer(1));
+//
+// filtersContainer.insertAdjacentHTML('beforebegin', '<article>faaa.content</article>');
+
