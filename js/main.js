@@ -41,23 +41,23 @@ var getRandomArrayElements = function (array) {
 // выбирает случайнЫЕ элементЫ из массива (случайное количество, не повторяются)
 
 var createOffer = function (userNumber) {
-  var newObject = {};
-  newObject.author = {avatar: 'img/avatars/user0' + userNumber + '.png'};
-  newObject.offer = {
-    title: 'заголовок предложения N' + userNumber,
-    address: getRandomMinMax(0, MAP_WIDTH) + ', ' + getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX),
-    price: getRandomMinMax(0, MAX_PRICE),
-    type: getRandomArrayElement(types),
-    rooms: getRandomMinMax(MIN_ROOMS, MAX_ROOMS),
-    guests: getRandomMinMax(MIN_GUESTS, MAX_GUESTS),
-    checkin: getRandomArrayElement(checkinTimes),
-    checkout: getRandomArrayElement(checkoutTimes),
-    features: getRandomArrayElements(features),
-    description: 'описание N' + userNumber,
-    photos: getRandomArrayElements(photos)
+  return {
+    author: {avatar: 'img/avatars/user0' + userNumber + '.png'},
+    offer: {
+      title: 'заголовок предложения N' + userNumber,
+      address: getRandomMinMax(0, MAP_WIDTH) + ', ' + getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX),
+      price: getRandomMinMax(0, MAX_PRICE),
+      type: getRandomArrayElement(types),
+      rooms: getRandomMinMax(MIN_ROOMS, MAX_ROOMS),
+      guests: getRandomMinMax(MIN_GUESTS, MAX_GUESTS),
+      checkin: getRandomArrayElement(checkinTimes),
+      checkout: getRandomArrayElement(checkoutTimes),
+      features: getRandomArrayElements(features),
+      description: 'описание N' + userNumber,
+      photos: getRandomArrayElements(photos)
+    },
+    location: {x: getRandomMinMax(0, MAP_WIDTH), y: getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX)}
   };
-  newObject.location = {x: getRandomMinMax(0, MAP_WIDTH), y: getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX)};
-  return newObject;
 };
 
 var createOffers = function (amountOfObjects) {
@@ -132,4 +132,4 @@ mapPins.appendChild(makeMarks(offers));
 // var faaa = fillCard(createOffer(1));
 //
 // filtersContainer.insertAdjacentHTML('beforebegin', '<article>faaa.content</article>');
-
+//
