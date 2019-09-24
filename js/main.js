@@ -30,24 +30,17 @@ var getRandomArrayElement = function (arr) {
 // выбирает случайный элемент из массива
 
 var getRandomArrayElements = function (array) {
-  var numberOfElements = getRandomMinMax(0, array.length - 1); // сколько элементов будет
+  var amountOfElements = getRandomMinMax(0, array.length - 1); // сколько элементов будет
   var selectedElements = []; // массив, в который поместятся все выбранные рандомные элементы
-  for (var i = 0; i < numberOfElements; i++) {
+  for (var i = 0; i < amountOfElements; i++) {
     var numberOfElement = getRandomMinMax(0, array.length - 1); // нашли рандомный номер элемента в массиве
-    selectedElements.push(array[numberOfElement]); // запихиваем в этот массив наш новоиспеченный выбранный элемент
-    var newArray = []; // создаем временный массив, в который поместим все элементы старого массива кроме уже выбранного :D Господи, мой мозг
-    for (var j = 0; j < array.length; j++) { // перебираем все элементы в массиве
-      if (j !== numberOfElement) { // отметаем выбранный элемент!
-        newArray.push(array[j]);
-      }
-    }
-    array = newArray;
+    selectedElements.push(array.splice(numberOfElement, 1)); // splice() удаляет элемент из массива, возвращает его, затем кладем его в будущий массив
   }
   return selectedElements;
 };
 // выбирает случайнЫЕ элементЫ из массива (случайное количество, не повторяются)
 
-var createObject = function (userNumber) {
+var createOffer = function (userNumber) {
   var newObject = {};
   newObject.author = {avatar: 'img/avatars/user0' + userNumber + '.png'};
   newObject.offer = {
@@ -67,23 +60,23 @@ var createObject = function (userNumber) {
   return newObject;
 };
 
-var createArrayOfObjects = function (amountOfObjects) {
+var createArrayOfOffers = function (amountOfObjects) {
   var arrayOfObjects = [];
   for (var i = 0; i < amountOfObjects; i++) {
-    arrayOfObjects.push(createObject(i + 1));
+    arrayOfObjects.push(createOffer(i + 1));
   }
   return arrayOfObjects;
 };
 // создает массив из объектов
 
-var offers = createArrayOfObjects(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
+var offers = createArrayOfOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
 
 
-var fillMark = function (jsObject) { // создает один дом-элемент - метку
+var fillMark = function (markObject) { // создает один дом-элемент - метку
   var markClone = templateMark.cloneNode(true);
-  markClone.style = 'left: ' + (jsObject.location.x + MARK_WIDTH / 2) + 'px; top: ' + (jsObject.location.y + MARK_HEIGHT) + 'px';
-  markClone.children[0].src = jsObject.author.avatar;
-  markClone.children[0].alt = jsObject.offer.title;
+  markClone.style = 'left: ' + (markObject.location.x - MARK_WIDTH / 2) + 'px; top: ' + (markObject.location.y - MARK_HEIGHT) + 'px';
+  markClone.children[0].src = markObject.author.avatar;
+  markClone.children[0].alt = markObject.offer.title;
   return markClone;
 };
 
