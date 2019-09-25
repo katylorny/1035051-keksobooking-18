@@ -18,6 +18,8 @@ var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var templateMark = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPins = document.querySelector('.map__pins');
+var templateCard = document.querySelector('#card').content.querySelector('.map__card');
+var filtersContainer = document.querySelector('.map__filters-container');
 
 
 var getRandomMinMax = function (min, max) {
@@ -55,7 +57,7 @@ var createOffer = function (userNumber) {
       checkout: getRandomArrayElement(checkoutTimes),
       features: getRandomArrayElements(features),
       description: 'описание N' + userNumber,
-      photos: getRandomArrayElements(photos.slice())               // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      photos: getRandomArrayElements(photos.slice()) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     },
     location: {x: getRandomMinMax(0, MAP_WIDTH), y: getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX)}
   };
@@ -91,12 +93,6 @@ var makeMarks = function (arrayMarks) {
 map.classList.remove('map--faded');
 mapPins.appendChild(makeMarks(offers));
 
-// --------------------------  module3-task3  -----------------------------
-// СЮДА СМОТРЕТЬ ПОКА НЕ НАДО, ДЕНИС!
-
-var templateCard = document.querySelector('#card').content.querySelector('.map__card');
-var filtersContainer = document.querySelector('.map__filters-container');
-
 var fillCard = function (cardObject) { // создает один элемент - карточку
   var cardClone = templateCard.cloneNode(true);
   cardClone.querySelector('.popup__title').textContent = cardObject.offer.title;
@@ -124,8 +120,6 @@ var fillCard = function (cardObject) { // создает один элемент
   }
 
   cardClone.querySelector('.popup__description').textContent = cardObject.offer.description;
-
-
   var popupPhoto = cardClone.querySelector('.popup__photo');
   var popupPhotos = cardClone.querySelector('.popup__photos');
   var fragmentPhotos = document.createDocumentFragment();
@@ -139,17 +133,14 @@ var fillCard = function (cardObject) { // создает один элемент
       fragmentPhotos.appendChild(popupClone);
     }
     popupPhotos.appendChild(fragmentPhotos);
-  }
-  else {
-    popupPhotos.removeChild(popupPhotos.children[0])
+  } else {
+    popupPhotos.removeChild(popupPhotos.children[0]);
   }
 
   cardClone.children[0].src = cardObject.author.avatar;
   return cardClone;
 };
 
-var faaa = fillCard(offers[1]);
-filtersContainer.before(faaa);
+filtersContainer.before(fillCard(offers[0]));
 
-// console.log(photos);
 
