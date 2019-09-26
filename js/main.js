@@ -20,7 +20,17 @@ var templateMark = document.querySelector('#pin').content.querySelector('.map__p
 var mapPins = document.querySelector('.map__pins');
 var templateCard = document.querySelector('#card').content.querySelector('.map__card');
 var filtersContainer = document.querySelector('.map__filters-container');
-
+var glossary = {
+  palace: 'Дворец',
+  house: 'Дом',
+  bungalo: 'Бунгало',
+  flat: 'Квартира',
+};
+// var fragmentFeatures = document.createDocumentFragment();
+var fragmentPhotos = document.createDocumentFragment();
+var cardClone = templateCard.cloneNode(true);
+var popupPhotos = cardClone.querySelector('.popup__photos');
+var popupPhoto = cardClone.querySelector('.popup__photo');
 
 var getRandomMinMax = function (min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
@@ -90,53 +100,41 @@ var makeMarks = function (arrayMarks) {
   return fragmentMark;
 };
 
+var translateWord = function (dictionary, word) {
+  return dictionary[word];
+};
+
+var createFeaturesList = function (selectedFeatures) {
+  var popupFeatures = '';
+  for (var i = 0; i < selectedFeatures.length; i++) {
+    popupFeatures += '<li class="popup__feature popup__feature--' + selectedFeatures[i] + '"></li>';
+  }
+  return popupFeatures;
+};
+
+var makeFragmentPhotos = function (photosArray) {
+  popupPhotos.removeChild(popupPhotos.children[0]);
+  for (var j = 0; j < photosArray.length; j++) {
+    var popupClone = popupPhoto.cloneNode(true);
+    popupClone.src = photosArray[j];
+    fragmentPhotos.appendChild(popupClone);
+  }
+  return fragmentPhotos;
+};
+
 map.classList.remove('map--faded');
 mapPins.appendChild(makeMarks(offers));
 
 var fillCard = function (cardObject) { // создает один элемент - карточку
-  var cardClone = templateCard.cloneNode(true);
   cardClone.querySelector('.popup__title').textContent = cardObject.offer.title;
   cardClone.querySelector('.popup__text--address').textContent = cardObject.offer.address;
   cardClone.querySelector('.popup__text--price').textContent = cardObject.offer.price + '₽/ночь';
-
-  if (cardObject.offer.type === 'flat') {
-    cardClone.querySelector('.popup__type').textContent = 'Квартира';
-  }
-  if (cardObject.offer.type === 'bungalo') {
-    cardClone.querySelector('.popup__type').textContent = 'Бунгало';
-  }
-  if (cardObject.offer.type === 'house') {
-    cardClone.querySelector('.popup__type').textContent = 'Дом';
-  }
-  if (cardObject.offer.type === 'palace') {
-    cardClone.querySelector('.popup__type').textContent = 'Дворец';
-  }
+  cardClone.querySelector('.popup__type').textContent = translateWord(glossary, cardObject.offer.type);
   cardClone.querySelector('.popup__text--capacity').textContent = cardObject.offer.rooms + ' комнаты для ' + cardObject.offer.guests + ' гостей';
   cardClone.querySelector('.popup__text--time').textContent = 'Заезд после ' + cardObject.offer.checkin + ', выезд до ' + cardObject.offer.checkout;
-
-  cardClone.querySelector('.popup__features').innerHTML = '';
-  for (var i = 0; i < cardObject.offer.features.length; i++) {
-    cardClone.querySelector('.popup__features').innerHTML += '<li class="popup__feature popup__feature--' + cardObject.offer.features[i] + '"></li>';
-  }
-
+  cardClone.querySelector('.popup__features').innerHTML = createFeaturesList(cardObject.offer.features);
   cardClone.querySelector('.popup__description').textContent = cardObject.offer.description;
-  var popupPhoto = cardClone.querySelector('.popup__photo');
-  var popupPhotos = cardClone.querySelector('.popup__photos');
-  var fragmentPhotos = document.createDocumentFragment();
-
-  if (cardObject.offer.photos.length >= 1) {
-    popupPhotos.removeChild(popupPhoto);
-
-    for (var j = 0; j < cardObject.offer.photos.length; j++) {
-      var popupClone = popupPhoto.cloneNode(true);
-      popupClone.src = cardObject.offer.photos[j];
-      fragmentPhotos.appendChild(popupClone);
-    }
-    popupPhotos.appendChild(fragmentPhotos);
-  } else {
-    popupPhotos.removeChild(popupPhotos.children[0]);
-  }
-
+  cardClone.querySelector('.popup__photos').appendChild(makeFragmentPhotos(cardObject.offer.photos));
   cardClone.children[0].src = cardObject.author.avatar;
   return cardClone;
 };
