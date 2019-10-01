@@ -181,38 +181,32 @@ mapPin.addEventListener('keydown', function (evt) {
   }
 });
 
+var changeSelectOptions = function (selectedIndex) {
+  var selectedRooms = rooms[selectedIndex].value;
+  guests[guests.length - 1].disabled = true;
 
-var changeSelectOptions = function () {
-  for (var i = 0; i < guests.length; i++) {
-    guests[i].disabled = false;
+  for (var i = 0; i < guests.length - 1; i++) {
+    if (guests[i].value > selectedRooms) {
+      guests[i].disabled = true;
+    } else {
+      guests[i].disabled = false;
+      guests[i].selected = true;
+    }
   }
-  if (rooms.value === '1') {
-    guests[0].disabled = true;
-    guests[1].disabled = true;
-    guests[3].disabled = true;
-    guests[2].selected = true;
-  }
-  if (rooms.value === '2') {
-    guests[0].disabled = true;
-    guests[3].disabled = true;
-    guests[2].selected = true;
 
-  }
-  if (rooms.value === '3') {
-    guests[3].disabled = true;
-    guests[2].selected = true;
-  }
-  if (rooms.value === '100') {
-    guests[0].disabled = true;
-    guests[1].disabled = true;
-    guests[2].disabled = true;
-    guests[3].selected = true;
+  if (selectedRooms === '100') {
+    for (var j = 0; j < guests.length - 1; j++) {
+      guests[j].disabled = true;
+    }
+    guests[guests.length - 1].disabled = false;
+    guests[guests.length - 1].selected = true;
   }
 };
 
-changeSelectOptions();
+changeSelectOptions(0); // первоначальный выбор количества мест
 
-rooms.addEventListener('change', function () {
-  changeSelectOptions();
+rooms.addEventListener('change', function (evt) {
+  var roomsSelectedIndex = evt.currentTarget.options.selectedIndex;
+  changeSelectOptions(roomsSelectedIndex);
 });
 
