@@ -157,17 +157,22 @@ var removeAttributes = function (attribute, array) {
   }
 };
 
+var fillAddress = function (coordX, coordY, sizeX, sizeY, isRound) {
+  if (isRound) {
+    return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
+  } else {
+    return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY);
+  }
+};
+
 var activateForm = function () {
   adForm.classList.remove('ad-form--disabled');
   map.classList.remove('map--faded');
   removeAttributes('disabled', fieldsets);
+  addressField.value = fillAddress(mapPin.style.left, mapPin.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
 };
 
-addressField.value = Math.round(parseInt(mapPin.style.left, 10) + MAP_PIN_SIZE_INIT / 2) + ', ' + Math.round(parseInt(mapPin.style.top, 10) + MAP_PIN_SIZE_INIT / 2);
-
-var fillAddress = function () {
-  addressField.value = Math.round(parseInt(mapPin.style.left, 10) + MAP_PIN_WIDTH_ACTIVE / 2) + ', ' + Math.round(parseInt(mapPin.style.top, 10) + MAP_PIN_HEIGHT_ACTIVE);
-};
+addressField.value = fillAddress(mapPin.style.left, mapPin.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT, true);
 
 mapPin.addEventListener('mousedown', function () {
   activateForm();
@@ -185,21 +190,21 @@ var changeSelectOptions = function (selectedIndex) {
   var selectedRooms = rooms[selectedIndex].value;
   guests[guests.length - 1].disabled = true;
 
-  for (var i = 0; i < guests.length - 1; i++) {
-    if (guests[i].value > selectedRooms) {
-      guests[i].disabled = true;
-    } else {
-      guests[i].disabled = false;
-      guests[i].selected = true;
-    }
-  }
-
   if (selectedRooms === '100') {
     for (var j = 0; j < guests.length - 1; j++) {
       guests[j].disabled = true;
     }
     guests[guests.length - 1].disabled = false;
     guests[guests.length - 1].selected = true;
+  } else {
+    for (var i = 0; i < guests.length - 1; i++) {
+      if (guests[i].value > selectedRooms) {
+        guests[i].disabled = true;
+      } else {
+        guests[i].disabled = false;
+        guests[i].selected = true;
+      }
+    }
   }
 };
 
