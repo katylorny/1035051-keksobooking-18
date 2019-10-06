@@ -176,27 +176,20 @@ var fillAddress = function (coordX, coordY, sizeX, sizeY, isRound) {
   }
 };
 
-
-var activateForm = function () {
-  adForm.classList.remove('ad-form--disabled');
-  map.classList.remove('map--faded');
-  removeAttributes('disabled', fieldsets);
-  addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
-  mapPins.appendChild(makeMarks(offers)); // создает и выводит метки
-  var mapPinCollection = mapPins.querySelectorAll('.map__pin');
-
-  for (var i = 1; i < mapPinCollection.length; i++) {
-    mapPinCollection[i].addEventListener('click', function (evt) {
+var operateCardOnButtonClick = function (buttonsCollection, dataArray) {
+  for (var i = 1; i < buttonsCollection.length; i++) {
+    buttonsCollection[i].addEventListener('click', function (evt) {
       evt.preventDefault();
       var markNumber = evt.currentTarget.id;
-      filtersContainer.before(fillCard(offers[markNumber]));
+      filtersContainer.before(fillCard(dataArray[markNumber]));
       var popup = document.querySelector('.popup');
       popup.classList.remove('hidden');
       var popupClose = popup.querySelector('.popup__close');
-      popupClose.addEventListener('click', function (evtClose) {
+      var onClosebuttonClick = function (evtClose) {
         evtClose.preventDefault();
         popup.classList.add('hidden');
-      });
+      };
+      popupClose.addEventListener('click', onClosebuttonClick, {once: true});
       document.addEventListener('keydown', function (evtEsc) {
         if (evtEsc.keyCode === ESC_KEYCODE) {
           popup.classList.add('hidden');
@@ -205,6 +198,17 @@ var activateForm = function () {
     });
   }
 };
+
+var activateForm = function () {
+  adForm.classList.remove('ad-form--disabled');
+  map.classList.remove('map--faded');
+  removeAttributes('disabled', fieldsets);
+  addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
+  mapPins.appendChild(makeMarks(offers)); // создает и выводит метки
+  var mapPinCollection = mapPins.querySelectorAll('.map__pin');
+  operateCardOnButtonClick(mapPinCollection, offers);
+};
+
 
 // валидация
 
