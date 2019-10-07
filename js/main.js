@@ -101,10 +101,11 @@ var offers = createOffers(AMOUNT_OF_OFFERS); // массив из 8 объявл
 
 var fillMark = function (markObject, numberOfOffer) { // создает один дом-элемент - метку
   var markClone = templateMark.cloneNode(true);
-  markClone.id = numberOfOffer + '';
+  // markClone.id = numberOfOffer + '';
   markClone.style = 'left: ' + (markObject.location.x - MARK_WIDTH / 2) + 'px; top: ' + (markObject.location.y - MARK_HEIGHT) + 'px';
   markClone.children[0].src = markObject.author.avatar;
   markClone.children[0].alt = markObject.offer.title;
+  markClone.dataset.markIndex = numberOfOffer;
   return markClone;
 };
 
@@ -157,9 +158,6 @@ var fillCard = function (cardObject) { // создает один элемент
   return cardClone;
 };
 
-
-// filtersContainer.before(fillCard(offers[0])); // - выводит одно объявление
-
 // ------------------------------
 
 var removeAttributes = function (attribute, array) {
@@ -176,28 +174,32 @@ var fillAddress = function (coordX, coordY, sizeX, sizeY, isRound) {
   }
 };
 
-var operateCardOnButtonClick = function (buttonsCollection, dataArray) {
-  for (var i = 1; i < buttonsCollection.length; i++) {
-    buttonsCollection[i].addEventListener('click', function (evt) {
-      evt.preventDefault();
-      var markNumber = evt.currentTarget.id;
-      filtersContainer.before(fillCard(dataArray[markNumber]));
-      var popup = document.querySelector('.popup');
-      popup.classList.remove('hidden');
-      var popupClose = popup.querySelector('.popup__close');
-      var onClosebuttonClick = function (evtClose) {
-        evtClose.preventDefault();
+var openPopup = function (element) {
+  if (element && element.dataset.markIndex !== undefined) {
+    filtersContainer.before(fillCard(offers[element.dataset.markIndex]));
+
+    var popup = document.querySelector('.popup');
+    var popupClose = popup.querySelector('.popup__close');
+    var onClosebuttonClick = function (evtClose) {
+      evtClose.preventDefault();
+      popup.classList.add('hidden');
+    };
+    var onEscKeydown = function (evtEsc) {
+      if (evtEsc.keyCode === ESC_KEYCODE) {
         popup.classList.add('hidden');
-      };
-      popupClose.addEventListener('click', onClosebuttonClick, {once: true});
-      document.addEventListener('keydown', function (evtEsc) {
-        if (evtEsc.keyCode === ESC_KEYCODE) {
-          popup.classList.add('hidden');
-        }
-      });
-    });
+      }
+    };
+
+    popup.classList.remove('hidden');
+    popupClose.addEventListener('click', onClosebuttonClick, {once: true});
+    document.addEventListener('keydown', onEscKeydown, {once: true});
   }
 };
+
+mapPins.addEventListener('click', function (evt) {
+  var targetElement = evt.target.closest('button');
+  openPopup(targetElement);
+});
 
 var activateForm = function () {
   adForm.classList.remove('ad-form--disabled');
@@ -205,8 +207,6 @@ var activateForm = function () {
   removeAttributes('disabled', fieldsets);
   addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
   mapPins.appendChild(makeMarks(offers)); // создает и выводит метки
-  var mapPinCollection = mapPins.querySelectorAll('.map__pin');
-  operateCardOnButtonClick(mapPinCollection, offers);
 };
 
 
