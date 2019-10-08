@@ -72,6 +72,9 @@
   window.data = {
     offers: createOffers(AMOUNT_OF_OFFERS), // массив из 8 объявлений(объектов)
     MAX_PRICE: MAX_PRICE,
+    MAP_WIDTH: MAP_WIDTH,
+    LOCATION_Y_MIN: LOCATION_Y_MIN,
+    LOCATION_Y_MAX: LOCATION_Y_MAX,
   };
-  // window.offers = createOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
+
 })();

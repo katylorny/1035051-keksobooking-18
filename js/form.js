@@ -48,10 +48,10 @@
     window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
   };
 
-
   addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
 
   var moveMainPin = function (evtX, evtY) {
+
     var startCoords = {
       x: evtX,
       y: evtY,
@@ -70,32 +70,46 @@
         y: moveEvt.clientY,
       };
 
-      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
-      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+      var xCoord = mapPinMain.offsetLeft - shift.x;
+      var yCoord = mapPinMain.offsetTop - shift.y;
+
+      if (xCoord > window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) {
+        mapPinMain.style.left = (window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) + 'px';
+      } else if (xCoord < 0) {
+        mapPinMain.style.left = '0px';
+      } else {
+        mapPinMain.style.left = xCoord + 'px';
+      }
+
+      if (yCoord < window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      } else if (yCoord > window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      } else {
+        mapPinMain.style.top = yCoord + 'px';
+      }
+
+      addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      mapPinMain.removeEventListener('mousemove', onMouseMove);
-      mapPinMain.removeEventListener('mouseup', onMouseUp);
-      console.log(mapPinMain.offsetLeft + '  ' + mapPinMain.offsetTop);// запустить функцию передвижения пина
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
     };
 
-    mapPinMain.addEventListener('mousemove', onMouseMove);
-    mapPinMain.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   };
-
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
     if (isRound) {
       activateForm();
-
     }
 
     moveMainPin(evt.clientX, evt.clientY);
-
   });
 
 
