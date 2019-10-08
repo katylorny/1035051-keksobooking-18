@@ -7,7 +7,7 @@
 
   var openPopup = function (element) {
     if (element && element.dataset.markIndex !== undefined) {
-      filtersContainer.before(window.fillCard(window.data.offers[element.dataset.markIndex]));
+      filtersContainer.before(window.card.fillCard(window.data.offers[element.dataset.markIndex]));
 
       var popup = document.querySelector('.popup');
       var popupClose = popup.querySelector('.popup__close');
