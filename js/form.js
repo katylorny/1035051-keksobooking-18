@@ -29,7 +29,9 @@
     return fragmentMark;
   };
 
-  var fillAddress = function (coordX, coordY, sizeX, sizeY, isRound) {
+  var isRound = true;
+
+  var correctCoords = function (coordX, coordY, sizeX, sizeY) {
     if (isRound) {
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
     } else {
@@ -39,27 +41,72 @@
 
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
+    isRound = false;
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
-    addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
+    addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
     window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
   };
 
-  // валидация
 
-  addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT, true);
+  addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
 
-  mapPinMain.addEventListener('mousedown', function () {
-    activateForm();
-    fillAddress();
+  var moveMainPin = function (evtX, evtY) {
+    var startCoords = {
+      x: evtX,
+      y: evtY,
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY,
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY,
+      };
+
+      mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+      mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      mapPinMain.removeEventListener('mousemove', onMouseMove);
+      mapPinMain.removeEventListener('mouseup', onMouseUp);
+      console.log(mapPinMain.offsetLeft + '  ' + mapPinMain.offsetTop);// запустить функцию передвижения пина
+    };
+
+    mapPinMain.addEventListener('mousemove', onMouseMove);
+    mapPinMain.addEventListener('mouseup', onMouseUp);
+  };
+
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    if (isRound) {
+      activateForm();
+
+    }
+
+    moveMainPin(evt.clientX, evt.clientY);
+
   });
+
 
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       activateForm();
-      fillAddress();
     }
   });
+
+
+  // валидация -------------------------------------
 
   var changeSelectOptions = function (selectedIndex) {
     var selectedRooms = rooms[selectedIndex].value;
