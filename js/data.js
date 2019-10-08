@@ -14,7 +14,7 @@
   var checkoutTimes = ['12:00', '13:00', '14:00'];
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-  window.MAX_PRICE = 100000;
+  var MAX_PRICE = 100000;
 
   var getRandomMinMax = function (min, max) {
     return min + Math.floor(Math.random() * (max - min + 1));
@@ -46,7 +46,7 @@
       offer: {
         title: 'заголовок предложения N' + userNumber,
         address: getRandomMinMax(0, MAP_WIDTH) + ', ' + getRandomMinMax(LOCATION_Y_MIN, LOCATION_Y_MAX),
-        price: getRandomMinMax(0, window.MAX_PRICE),
+        price: getRandomMinMax(0, MAX_PRICE),
         type: getRandomArrayElement(types),
         rooms: getRandomMinMax(MIN_ROOMS, MAX_ROOMS),
         guests: getRandomMinMax(MIN_GUESTS, MAX_GUESTS),
@@ -69,5 +69,9 @@
   };
   // создает массив из объектов
 
-  window.offers = createOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
+  window.data = {
+    offers: createOffers(AMOUNT_OF_OFFERS), // массив из 8 объявлений(объектов)
+    MAX_PRICE: MAX_PRICE,
+  };
+  // window.offers = createOffers(AMOUNT_OF_OFFERS); // массив из 8 объявлений(объектов)
 })();

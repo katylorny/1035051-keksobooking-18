@@ -42,7 +42,7 @@
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
     addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
-    window.mapPins.appendChild(makeMarks(window.offers)); // создает и выводит метки
+    window.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
   };
 
   // валидация
@@ -98,7 +98,7 @@
 
   var priceOfOffer = adForm.querySelector('#price');
   priceOfOffer.setAttribute('required', 'required');
-  priceOfOffer.setAttribute('max', window.MAX_PRICE + '');
+  priceOfOffer.setAttribute('max', window.data.MAX_PRICE + '');
 
   var MIN_PRICES = {
     bungalo: '0',
