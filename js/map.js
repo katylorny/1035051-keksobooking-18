@@ -3,7 +3,7 @@
 (function () {
   var ESC_KEYCODE = 27;
   var filtersContainer = document.querySelector('.map__filters-container');
-  window.mapPins = document.querySelector('.map__pins');
+  var mapPins = document.querySelector('.map__pins');
 
   var openPopup = function (element) {
     if (element && element.dataset.markIndex !== undefined) {
@@ -27,8 +27,12 @@
     }
   };
 
-  window.mapPins.addEventListener('click', function (evt) {
+  mapPins.addEventListener('click', function (evt) {
     var targetElement = evt.target.closest('button');
     openPopup(targetElement);
   });
+
+  window.map = {
+    mapPins: mapPins,
+  };
 })();

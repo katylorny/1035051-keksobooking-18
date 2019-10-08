@@ -24,7 +24,7 @@
   var makeMarks = function (arrayMarks) {
     var fragmentMark = document.createDocumentFragment();
     for (var i = 0; i < arrayMarks.length; i++) {
-      fragmentMark.appendChild(window.fillMark(arrayMarks[i], i));
+      fragmentMark.appendChild(window.pin.fillMark(arrayMarks[i], i));
     }
     return fragmentMark;
   };
@@ -42,7 +42,7 @@
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
     addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
-    window.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
+    window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
   };
 
   // валидация
