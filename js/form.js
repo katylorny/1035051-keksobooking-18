@@ -21,7 +21,6 @@
       array[i].removeAttribute(attribute);
     }
   };
-
   var makeMarks = function (arrayMarks) {
     var fragmentMark = document.createDocumentFragment();
     for (var i = 0; i < arrayMarks.length; i++) {
@@ -46,8 +45,9 @@
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
     addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
-    window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
-
+    if (window.data.offers[0]) {
+      window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
+    }
     xCoord = parseInt(mapPinMain.style.left, 10);
     yCoord = parseInt(mapPinMain.style.top, 10);
 
@@ -197,4 +197,9 @@
 
   timeIn.addEventListener('change', changeTimeOut);
   timeOut.addEventListener('change', changeTimeIn);
+
+  window.form = {
+    makeMarks: makeMarks,
+    map: map,
+  };
 })();
