@@ -14,7 +14,8 @@
   var rooms = adForm.querySelector('#room_number');
   var guests = adForm.querySelector('#capacity');
   var mapPinMain = document.querySelector('.map__pin--main');
-
+  var xCoord;
+  var yCoord;
   var removeAttributes = function (attribute, array) {
     for (var i = 0; i < array.length; i++) {
       array[i].removeAttribute(attribute);
@@ -29,7 +30,9 @@
     return fragmentMark;
   };
 
-  var fillAddress = function (coordX, coordY, sizeX, sizeY, isRound) {
+  var isRound = true;
+
+  var correctCoords = function (coordX, coordY, sizeX, sizeY) {
     if (isRound) {
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
     } else {
@@ -39,27 +42,92 @@
 
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
+    isRound = false;
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
-    addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE, false);
+    addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
     window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
+
+    xCoord = parseInt(mapPinMain.style.left, 10);
+    yCoord = parseInt(mapPinMain.style.top, 10);
+
   };
 
-  // валидация
+  addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
 
-  addressField.value = fillAddress(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT, true);
+  var moveMainPin = function (evtX, evtY) {
 
-  mapPinMain.addEventListener('mousedown', function () {
-    activateForm();
-    fillAddress();
+    var startCoords = {
+      x: evtX,
+      y: evtY,
+    };
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      // xCoord = parseInt(mapPinMain.style.left, 10);
+      // yCoord = parseInt(mapPinMain.style.top, 10);
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY,
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY,
+      };
+
+      xCoord = xCoord - shift.x;
+      yCoord = yCoord - shift.y;
+
+      if (xCoord > window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) {
+        mapPinMain.style.left = (window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) + 'px';
+      } else if (xCoord < 0) {
+        mapPinMain.style.left = '0px';
+      } else {
+        mapPinMain.style.left = xCoord + 'px';
+      }
+
+      if (yCoord < window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      } else if (yCoord > window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      } else {
+        mapPinMain.style.top = yCoord + 'px';
+      }
+      addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  };
+
+  mapPinMain.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    if (isRound) {
+      activateForm();
+    }
+    xCoord = parseInt(mapPinMain.style.left, 10);
+    yCoord = parseInt(mapPinMain.style.top, 10);
+    moveMainPin(evt.clientX, evt.clientY);
   });
+
 
   mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       activateForm();
-      fillAddress();
     }
   });
+
+
+  // валидация -------------------------------------
 
   var changeSelectOptions = function (selectedIndex) {
     var selectedRooms = rooms[selectedIndex].value;
