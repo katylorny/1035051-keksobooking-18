@@ -114,7 +114,8 @@
     if (isRound) {
       activateForm();
     }
-
+    xCoord = parseInt(mapPinMain.style.left, 10);
+    yCoord = parseInt(mapPinMain.style.top, 10);
     moveMainPin(evt.clientX, evt.clientY);
   });
 
