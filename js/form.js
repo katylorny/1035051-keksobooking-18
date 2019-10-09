@@ -14,7 +14,8 @@
   var rooms = adForm.querySelector('#room_number');
   var guests = adForm.querySelector('#capacity');
   var mapPinMain = document.querySelector('.map__pin--main');
-
+  var xCoord;
+  var yCoord;
   var removeAttributes = function (attribute, array) {
     for (var i = 0; i < array.length; i++) {
       array[i].removeAttribute(attribute);
@@ -46,6 +47,10 @@
     removeAttributes('disabled', fieldsets);
     addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
     window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
+
+    xCoord = parseInt(mapPinMain.style.left, 10);
+    yCoord = parseInt(mapPinMain.style.top, 10);
+
   };
 
   addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
@@ -59,6 +64,8 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
+      // xCoord = parseInt(mapPinMain.style.left, 10);
+      // yCoord = parseInt(mapPinMain.style.top, 10);
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -70,8 +77,8 @@
         y: moveEvt.clientY,
       };
 
-      var xCoord = mapPinMain.offsetLeft - shift.x;
-      var yCoord = mapPinMain.offsetTop - shift.y;
+      xCoord = xCoord - shift.x;
+      yCoord = yCoord - shift.y;
 
       if (xCoord > window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) {
         mapPinMain.style.left = (window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) + 'px';
@@ -88,7 +95,6 @@
       } else {
         mapPinMain.style.top = yCoord + 'px';
       }
-
       addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
     };
 
