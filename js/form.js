@@ -198,8 +198,18 @@
   timeIn.addEventListener('change', changeTimeOut);
   timeOut.addEventListener('change', changeTimeIn);
 
+  // ------------------- отправка формы
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    console.log(new FormData(adForm));
+    window.backend.send(new FormData(adForm), window.backend.sendSuccessHandler, window.backend.loadErrorHandler);
+  });
+
+  // -----------------
   window.form = {
     makeMarks: makeMarks,
     map: map,
+    adForm: adForm,
   };
 })();

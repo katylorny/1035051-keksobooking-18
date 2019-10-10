@@ -9,6 +9,11 @@
 
   };
 
+  var sendSuccessHandler = function () {
+    window.form.adForm.reset();
+    // console.log(1);
+  };
+
   var loadErrorHandler = function () {
     document.body.insertAdjacentElement('afterbegin', errorMessageClone);
   };
@@ -24,6 +29,7 @@
         }
       } else {
         onError();
+        console.log();
       }
     });
     request.addEventListener('error', function () {
@@ -43,6 +49,19 @@
       xhr.open('GET', URL);
       xhr.send();
     },
+
+    send: function (data, onSuccess, onError) {
+      var URL = 'https://js.dump.academy/keksobooking';
+      var xhr = new XMLHttpRequest();
+      makeRequest(onSuccess, onError, xhr);
+      console.log(URL);
+      console.log(xhr);
+      xhr.open('POST', URL);
+      xhr.send(data);
+    },
+
+    sendSuccessHandler: sendSuccessHandler,
+    loadErrorHandler: loadErrorHandler,
 
   };
 
