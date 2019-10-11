@@ -34,5 +34,6 @@
 
   window.map = {
     mapPins: mapPins,
+    ESC_KEYCODE: ESC_KEYCODE,
   };
 })();

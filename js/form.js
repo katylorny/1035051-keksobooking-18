@@ -16,9 +16,16 @@
   var mapPinMain = document.querySelector('.map__pin--main');
   var xCoord;
   var yCoord;
+  var xDefault = mapPinMain.style.left;
+  var yDefault = mapPinMain.style.top;
   var removeAttributes = function (attribute, array) {
     for (var i = 0; i < array.length; i++) {
       array[i].removeAttribute(attribute);
+    }
+  };
+  var addAttributes = function (attribute, array) {
+    for (var i = 0; i < array.length; i++) {
+      array[i].setAttribute(attribute, attribute);
     }
   };
   var makeMarks = function (arrayMarks) {
@@ -29,31 +36,73 @@
     return fragmentMark;
   };
 
-  var isRound = true;
+  mapPinMain.dataset.isRound = true;
 
   var correctCoords = function (coordX, coordY, sizeX, sizeY) {
-    if (isRound) {
+    if (mapPinMain.dataset.isRound) {
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
     } else {
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY);
     }
   };
 
+  var changeSelectOptions = function (selectedIndex) {
+    var selectedRooms = rooms[selectedIndex].value;
+    guests[guests.length - 1].disabled = true;
+
+    if (selectedRooms === '100') {
+      for (var j = 0; j < guests.length - 1; j++) {
+        guests[j].disabled = true;
+      }
+      guests[guests.length - 1].disabled = false;
+      guests[guests.length - 1].selected = true;
+    } else {
+      for (var i = 0; i < guests.length - 1; i++) {
+        if (guests[i].value > selectedRooms) {
+          guests[i].disabled = true;
+        } else {
+          guests[i].disabled = false;
+          guests[i].selected = true;
+        }
+      }
+    }
+  };
+
+
+  // changeSelectOptions(0); // первоначальный выбор количества мест
+
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
-    isRound = false;
+    mapPinMain.dataset.isRound = false;
     map.classList.remove('map--faded');
     removeAttributes('disabled', fieldsets);
     addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_WIDTH_ACTIVE, MAP_PIN_HEIGHT_ACTIVE);
-    if (window.data.offers[0]) {
-      window.map.mapPins.appendChild(makeMarks(window.data.offers)); // создает и выводит метки
-    }
+
+    window.backend.load(window.backend.loadSuccessHandler, window.backend.loadErrorHandler); // Загружает и выводит пины
+    changeSelectOptions(0);
     xCoord = parseInt(mapPinMain.style.left, 10);
     yCoord = parseInt(mapPinMain.style.top, 10);
 
   };
 
+  var deactivateForm = function () {
+    addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+    mapPinMain.dataset.isRound = true;
+    addAttributes('disabled', fieldsets);
+    while (window.map.mapPins.children.length > 2) {
+      window.map.mapPins.removeChild(window.map.mapPins.children[2]);
+    }
+    if (document.querySelector('.popup')) {
+      document.querySelector('.popup').classList.add('hidden');
+    }
+    mapPinMain.style.left = xDefault;
+    mapPinMain.style.top = yDefault;
+    addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
+  };
   addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
+
 
   var moveMainPin = function (evtX, evtY) {
 
@@ -111,7 +160,7 @@
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    if (isRound) {
+    if (mapPinMain.dataset.isRound) {
       activateForm();
     }
     xCoord = parseInt(mapPinMain.style.left, 10);
@@ -126,33 +175,6 @@
     }
   });
 
-
-  // валидация -------------------------------------
-
-  var changeSelectOptions = function (selectedIndex) {
-    var selectedRooms = rooms[selectedIndex].value;
-    guests[guests.length - 1].disabled = true;
-
-    if (selectedRooms === '100') {
-      for (var j = 0; j < guests.length - 1; j++) {
-        guests[j].disabled = true;
-      }
-      guests[guests.length - 1].disabled = false;
-      guests[guests.length - 1].selected = true;
-    } else {
-      for (var i = 0; i < guests.length - 1; i++) {
-        if (guests[i].value > selectedRooms) {
-          guests[i].disabled = true;
-        } else {
-          guests[i].disabled = false;
-          guests[i].selected = true;
-        }
-      }
-    }
-  };
-
-
-  changeSelectOptions(0); // первоначальный выбор количества мест
 
   rooms.addEventListener('change', function (evt) {
     var roomsSelectedIndex = evt.currentTarget.options.selectedIndex;
@@ -198,8 +220,25 @@
   timeIn.addEventListener('change', changeTimeOut);
   timeOut.addEventListener('change', changeTimeIn);
 
+  // ------------------- отправка формы
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.send(new FormData(adForm), window.backend.sendSuccessHandler, window.backend.loadErrorHandler);
+  });
+
+  // -----------------
   window.form = {
     makeMarks: makeMarks,
     map: map,
+    adForm: adForm,
+    // changeSelectOptions: changeSelectOptions,
+    addressField: addressField,
+    // correctCoords: correctCoords,
+    mapPinMain: mapPinMain,
+    MAP_PIN_SIZE_INIT: MAP_PIN_SIZE_INIT,
+    // addAttributes: addAttributes,
+    fieldsets: fieldsets,
+    deactivateForm: deactivateForm,
   };
 })();
