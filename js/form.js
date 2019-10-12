@@ -30,13 +30,13 @@
   };
 
 
-  var makeMarks = function (arrayMarks) { // создает фрагмент пинов
+  var makeMarks = function () { // создает фрагмент пинов
     var fragmentMark = document.createDocumentFragment();
 
-    var numberOfMarks = arrayMarks.length > 5 ? 5 : arrayMarks.length;
+    var numberOfMarks = window.data.offers.length > 5 ? 5 : window.data.offers.length;
 
     for (var i = 0; i < numberOfMarks; i++) {
-      fragmentMark.appendChild(window.pin.fillMark(arrayMarks[i], i));
+      fragmentMark.appendChild(window.pin.fillMark(window.data.offers[i], i));
     }
     return fragmentMark;
   };
@@ -49,9 +49,9 @@
     }
   };
 
-  var showMarks = function (array) { //  выводит пины по массиву данных
+  var showMarks = function () { //  выводит пины по массиву данных
     cleanMapPins(); // очищаем карту от пинов
-    var fragment = makeMarks(array); // создаем пины
+    var fragment = makeMarks(); // создаем пины
     window.map.mapPins.appendChild(fragment); // размещаем пины на карте
   };
 

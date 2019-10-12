@@ -11,7 +11,7 @@
   var loadSuccessHandler = function (dataOffers) {
     window.serverData = dataOffers;
     window.data.offers = dataOffers;
-    window.form.showMarks(window.data.offers);
+    window.form.showMarks();
   };
 
   var showSuccessMessage = function (message) {
