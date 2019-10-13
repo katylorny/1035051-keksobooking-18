@@ -28,12 +28,31 @@
       array[i].setAttribute(attribute, attribute);
     }
   };
-  var makeMarks = function (arrayMarks) {
+
+
+  var makeMarks = function () { // создает фрагмент пинов
     var fragmentMark = document.createDocumentFragment();
-    for (var i = 0; i < arrayMarks.length; i++) {
-      fragmentMark.appendChild(window.pin.fillMark(arrayMarks[i], i));
+
+    var numberOfMarks = window.data.offers.length > 5 ? 5 : window.data.offers.length;
+
+    for (var i = 0; i < numberOfMarks; i++) {
+      fragmentMark.appendChild(window.pin.fillMark(window.data.offers[i], i));
     }
     return fragmentMark;
+  };
+
+
+  var cleanMapPins = function () { // очищает карту от пинов
+
+    while (window.map.mapPins.children.length > 2) {
+      window.map.mapPins.removeChild(window.map.mapPins.children[2]);
+    }
+  };
+
+  var showMarks = function () { //  выводит пины по массиву данных
+    cleanMapPins(); // очищаем карту от пинов
+    var fragment = makeMarks(); // создаем пины
+    window.map.mapPins.appendChild(fragment); // размещаем пины на карте
   };
 
   mapPinMain.dataset.isRound = true;
@@ -69,8 +88,6 @@
   };
 
 
-  // changeSelectOptions(0); // первоначальный выбор количества мест
-
   var activateForm = function () {
     adForm.classList.remove('ad-form--disabled');
     mapPinMain.dataset.isRound = false;
@@ -91,15 +108,14 @@
     adForm.classList.add('ad-form--disabled');
     mapPinMain.dataset.isRound = true;
     addAttributes('disabled', fieldsets);
-    while (window.map.mapPins.children.length > 2) {
-      window.map.mapPins.removeChild(window.map.mapPins.children[2]);
-    }
+    cleanMapPins();
     if (document.querySelector('.popup')) {
       document.querySelector('.popup').classList.add('hidden');
     }
     mapPinMain.style.left = xDefault;
     mapPinMain.style.top = yDefault;
     addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
+    window.filter.housingType.options.selectedIndex = 0;
   };
   addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
 
@@ -240,5 +256,7 @@
     // addAttributes: addAttributes,
     fieldsets: fieldsets,
     deactivateForm: deactivateForm,
+    cleanMapPins: cleanMapPins,
+    showMarks: showMarks,
   };
 })();

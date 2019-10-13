@@ -6,10 +6,12 @@
 
   var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   var successMessageClone = successMessageTemplate.cloneNode(true);
+  // var serverData = [];
 
   var loadSuccessHandler = function (dataOffers) {
+    window.serverData = dataOffers;
     window.data.offers = dataOffers;
-    window.map.mapPins.appendChild(window.form.makeMarks(window.data.offers)); // создает и выводит метки
+    window.form.showMarks();
   };
 
   var showSuccessMessage = function (message) {
