@@ -11,7 +11,7 @@
 
       var popup = document.querySelector('.popup');
       var popupClose = popup.querySelector('.popup__close');
-      var onClosebuttonClick = function (evtClose) {
+      var onCloseButtonClick = function (evtClose) {
         evtClose.preventDefault();
         popup.classList.add('hidden');
       };
@@ -22,7 +22,7 @@
       };
 
       popup.classList.remove('hidden');
-      popupClose.addEventListener('click', onClosebuttonClick, {once: true});
+      popupClose.addEventListener('click', onCloseButtonClick, {once: true});
       document.addEventListener('keydown', onEscKeydown, {once: true});
     }
   };
