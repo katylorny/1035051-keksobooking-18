@@ -6,6 +6,10 @@
   var MAP_PIN_HEIGHT_ACTIVE = 87;
   var MIN_TITLE_LENGTH = 30;
   var MAX_TITLE_LENGTH = 100;
+  var MAP_WIDTH = 1200;
+  var MAX_PRICE = 100000;
+  var LOCATION_Y_MIN = 130;
+  var LOCATION_Y_MAX = 630;
   var ENTER_KEYCODE = 13;
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
@@ -38,8 +42,8 @@
     // for (var i = 0; i < numberOfMarks; i++) {
     //   fragmentMark.appendChild(window.pin.fillMark(window.data.offers[i], i));
     // }
-    for (var i = 0; i < window.data.offers.slice(0, 5).length; i++) {
-      fragmentMark.appendChild(window.pin.fillMark(window.data.offers[i], i));
+    for (var i = 0; i < window.offers.slice(0, 5).length; i++) {
+      fragmentMark.appendChild(window.pin.fillMark(window.offers[i], i));
     }
 
     return fragmentMark;
@@ -148,18 +152,18 @@
       xCoord = xCoord - shift.x;
       yCoord = yCoord - shift.y;
 
-      if (xCoord > window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) {
-        mapPinMain.style.left = (window.data.MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) + 'px';
+      if (xCoord > MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) {
+        mapPinMain.style.left = (MAP_WIDTH - MAP_PIN_WIDTH_ACTIVE) + 'px';
       } else if (xCoord < 0) {
         mapPinMain.style.left = '0px';
       } else {
         mapPinMain.style.left = xCoord + 'px';
       }
 
-      if (yCoord < window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) {
-        mapPinMain.style.top = (window.data.LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) + 'px';
-      } else if (yCoord > window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) {
-        mapPinMain.style.top = (window.data.LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      if (yCoord < LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (LOCATION_Y_MIN - MAP_PIN_HEIGHT_ACTIVE) + 'px';
+      } else if (yCoord > LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) {
+        mapPinMain.style.top = (LOCATION_Y_MAX - MAP_PIN_HEIGHT_ACTIVE) + 'px';
       } else {
         mapPinMain.style.top = yCoord + 'px';
       }
@@ -207,7 +211,7 @@
 
   var priceOfOffer = adForm.querySelector('#price');
   priceOfOffer.setAttribute('required', 'required');
-  priceOfOffer.setAttribute('max', window.data.MAX_PRICE + '');
+  priceOfOffer.setAttribute('max', MAX_PRICE + '');
 
   var MIN_PRICES = {
     bungalo: '0',
