@@ -10,7 +10,7 @@
 
   var loadSuccessHandler = function (dataOffers) {
     window.serverData = dataOffers;
-    window.data.offers = dataOffers;
+    window.offers = dataOffers;
     window.form.showMarks();
   };
 
