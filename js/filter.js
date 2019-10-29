@@ -13,7 +13,21 @@
   var mapCheckboxes = housingFeatures.querySelectorAll('.map__checkbox');
 
 
-  var filterMarks = function () {
+  var clearfilters = function(){     /////////////
+    if (document.querySelector('.popup')) { /////
+      document.querySelector('.popup').classList.add('hidden'); ///////////////////
+    }
+    window.data.offers = window.serverData; //////////////////////
+    housingType.options[0].selected = true; //////////////////////
+    housingPrice.options[0].selected = true; //////////////////////
+    housingRooms.options[0].selected = true; ////////////////////////////
+    housingGuests.options[0].selected = true; //////////////////////
+    for (var i = 0; i < mapCheckboxes.length; i++) { ///////////////////////
+      mapCheckboxes[i].checked = false; ////////////////////
+    }
+  };
+
+  var filterMarks1 = function () {
     if (document.querySelector('.popup')) {
       document.querySelector('.popup').classList.add('hidden');
     }
@@ -73,10 +87,15 @@
     }
 
     window.data.offers = filteredData;
-    window.debounce(function () {
-      window.form.showMarks();
-    })(); // тут почему-то работает только с этими скобочками!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Хотя вроде их не должно быть!
+    // window.debounce(function () {
+    //   window.form.showMarks();
+    // })(); // тут почему-то работает только с этими скобочками!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Хотя вроде их не должно быть!
   };
+
+  var filterMarks = window.debounce(function () {  ///////////////
+    filterMarks1();  /////////////////////////////////////
+    window.form.showMarks();  /////////////////////////////
+  })  ////////////////////////////
 
   mapFilters.addEventListener('change', function () {
     filterMarks();
@@ -84,6 +103,7 @@
 
   window.filter = {
     housingType: housingType,
+    clearfilters: clearfilters,
     // filterMarks: filterMarks,
   };
 

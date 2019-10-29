@@ -61,9 +61,22 @@
   mapPinMain.dataset.isRound = true;
 
   var correctCoords = function (coordX, coordY, sizeX, sizeY) {
-    if (mapPinMain.dataset.isRound) {
+
+
+
+
+
+
+    if (mapPinMain.dataset.isRound === 'true') {  //////////////////////////////////////
+
+
+
+
+
+      console.log('isround',mapPinMain.dataset,coordX, coordY);
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
     } else {
+      console.log('else', mapPinMain.dataset,coordX, coordY);
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY);
     }
   };
@@ -179,9 +192,13 @@
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    if (mapPinMain.dataset.isRound) {
+    if (mapPinMain.dataset.isRound === 'true') {  ///////////////////////////////
       activateForm();
-    }
+    };
+    //   else {  ////////////////////////////////////
+    //   window.filter.clearfilters();  /////////////////////////
+    //   activateForm();
+    // }
     xCoord = parseInt(mapPinMain.style.left, 10);
     yCoord = parseInt(mapPinMain.style.top, 10);
     moveMainPin(evt.clientX, evt.clientY);
