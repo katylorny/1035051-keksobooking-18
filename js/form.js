@@ -187,10 +187,6 @@
     if (mapPinMain.dataset.isRound === 'true') { // !
       activateForm();
     }
-    //   else {  ////////////////////////////////////
-    //   window.filter.clearfilters();  /////////////////////////
-    //   activateForm();
-    // }
     xCoord = parseInt(mapPinMain.style.left, 10);
     yCoord = parseInt(mapPinMain.style.top, 10);
     moveMainPin(evt.clientX, evt.clientY);
@@ -257,18 +253,13 @@
 
   // -----------------
   window.form = {
-    makeMarks: makeMarks,
     map: map,
     adForm: adForm,
-    // changeSelectOptions: changeSelectOptions,
     addressField: addressField,
-    // correctCoords: correctCoords,
     mapPinMain: mapPinMain,
     MAP_PIN_SIZE_INIT: MAP_PIN_SIZE_INIT,
-    // addAttributes: addAttributes,
     fieldsets: fieldsets,
     deactivateForm: deactivateForm,
-    cleanMapPins: cleanMapPins,
     showMarks: showMarks,
   };
 })();
