@@ -2,6 +2,8 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  // var divContainer = document.querySelector('.ad-form__photo-container');
+  var upload = document.querySelector('.ad-form__upload');
 
   // аватар
   var avatarFileChooser = document.querySelector('.ad-form__field input[type=file]');
@@ -10,12 +12,6 @@
   // фото жилья
   var photoFileChooser = document.querySelector('.ad-form__upload input[type=file]');
   var photoPreviewDiv = document.querySelector('.ad-form__photo');
-  var img = document.createElement('img');
-  photoPreviewDiv.append(img);
-  var photoPreview = document.querySelector('.ad-form__photo img');
-  photoPreview.width = '70';
-  photoPreviewDiv.style = 'overflow: hidden';
-  // photoPreview.height = "70";
 
 
   // общая функция загрузки изображения и показа preview
@@ -23,11 +19,11 @@
     var file = chooser.files[0];
     var fileName = file.name.toLowerCase();
 
-    var matches = FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
+    var isPicture = FILE_TYPES.some(function (element) {
+      return fileName.endsWith(element);
     });
 
-    if (matches) {
+    if (isPicture) {
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
@@ -45,8 +41,16 @@
 
   // -------- фото жилья -------
   photoFileChooser.addEventListener('change', function () {
-
-    console.log(photoPreview);
+    if (photoPreviewDiv.querySelector('img')) {
+      var clone = photoPreviewDiv.cloneNode(true);
+      upload.insertAdjacentElement('afterend', clone);
+    } else {
+      var img = document.createElement('img');
+      img.width = 70;
+      photoPreviewDiv.append(img);
+      photoPreviewDiv.style = 'overflow: hidden';
+    }
+    var photoPreview = document.querySelector('.ad-form__photo img');
     loadPicture(photoFileChooser, photoPreview);
   });
 
