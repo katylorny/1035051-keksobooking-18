@@ -16,11 +16,11 @@
   });
 
 
-  var clearfilters = function () {
+  var clearFilters = function () {
     if (document.querySelector('.popup')) {
       document.querySelector('.popup').classList.add('hidden');
     }
-    window.data.offers = window.serverData;
+    window.offers = window.serverData;
     housingType.options[0].selected = true;
     housingPrice.options[0].selected = true;
     housingRooms.options[0].selected = true;
@@ -28,6 +28,10 @@
     for (var i = 0; i < mapCheckboxes.length; i++) {
       mapCheckboxes[i].checked = false;
     }
+    window.pictureload.avatarPreview.src = 'img/muffin-grey.svg';
+    // window.pictureload.photoPreviewDiv.removeChild(window.pictureload.photoPreviewDiv.children[0]);
+    window.pictureload.photoPreview.removeAttribute('src');
+
   };
 
   var filterMarks1 = function () {
@@ -116,7 +120,7 @@
 
   window.filter = {
     housingType: housingType,
-    clearfilters: clearfilters,
+    clearFilters: clearFilters,
     // filterMarks: filterMarks,
   };
 

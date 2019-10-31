@@ -111,6 +111,7 @@
   };
 
   var deactivateForm = function () {
+    window.filter.clearFilters();
     addressField.value = correctCoords(mapPinMain.style.left, mapPinMain.style.top, MAP_PIN_SIZE_INIT, MAP_PIN_SIZE_INIT);
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
