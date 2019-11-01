@@ -11,6 +11,14 @@
   var LOCATION_Y_MIN = 130;
   var LOCATION_Y_MAX = 630;
   var ENTER_KEYCODE = 13;
+  var PINS_QUANTITY = 5;
+  var SPECIAL_ROOMS_AMOUNT = '100';
+  var MIN_PRICES = {
+    bungalo: '0',
+    flat: '1000',
+    house: '5000',
+    palace: '10000',
+  };
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
   var fieldsets = adForm.querySelectorAll('fieldset');
@@ -22,30 +30,24 @@
   var yCoord;
   var xDefault = mapPinMain.style.left;
   var yDefault = mapPinMain.style.top;
+
   var removeAttributes = function (attribute, array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].removeAttribute(attribute);
-    }
+    array.forEach(function (element) {
+      element.removeAttribute(attribute);
+    });
   };
   var addAttributes = function (attribute, array) {
-    for (var i = 0; i < array.length; i++) {
-      array[i].setAttribute(attribute, attribute);
-    }
+    array.forEach(function (element) {
+      element.setAttribute(attribute, attribute);
+    });
   };
 
 
   var makeMarks = function () { // создает фрагмент пинов
     var fragmentMark = document.createDocumentFragment();
-
-    // var numberOfMarks = window.data.offers.length > 5 ? 5 : window.data.offers.length;
-
-    // for (var i = 0; i < numberOfMarks; i++) {
-    //   fragmentMark.appendChild(window.pin.fillMark(window.data.offers[i], i));
-    // }
-    for (var i = 0; i < window.offers.slice(0, 5).length; i++) {
-      fragmentMark.appendChild(window.pin.fillMark(window.offers[i], i));
-    }
-
+    window.offers.slice(0, PINS_QUANTITY).forEach(function (element, number) {
+      fragmentMark.appendChild(window.pin.fillMark(window.offers[number], number));
+    });
     return fragmentMark;
   };
 
@@ -68,16 +70,15 @@
 
     if (mapPinMain.dataset.isRound === 'true') { // !
       return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY / 2);
-    } else {
-      return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY);
     }
+    return Math.round(parseInt(coordX, 10) + sizeX / 2) + ', ' + Math.round(parseInt(coordY, 10) + sizeY);
   };
 
   var changeSelectOptions = function (selectedIndex) {
     var selectedRooms = rooms[selectedIndex].value;
     guests[guests.length - 1].disabled = true;
 
-    if (selectedRooms === '100') {
+    if (selectedRooms === SPECIAL_ROOMS_AMOUNT) {
       for (var j = 0; j < guests.length - 1; j++) {
         guests[j].disabled = true;
       }
@@ -107,7 +108,6 @@
     changeSelectOptions(0);
     xCoord = parseInt(mapPinMain.style.left, 10);
     yCoord = parseInt(mapPinMain.style.top, 10);
-    // window.filter.filterMarks();
   };
 
   var deactivateForm = function () {
@@ -138,9 +138,6 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      // xCoord = parseInt(mapPinMain.style.left, 10);
-      // yCoord = parseInt(mapPinMain.style.top, 10);
-
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY,
@@ -185,7 +182,7 @@
 
   mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    if (mapPinMain.dataset.isRound === 'true') { // !
+    if (mapPinMain.dataset.isRound === 'true') {
       activateForm();
     }
     xCoord = parseInt(mapPinMain.style.left, 10);
@@ -199,7 +196,6 @@
       activateForm();
     }
   });
-
 
   rooms.addEventListener('change', function (evt) {
     var roomsSelectedIndex = evt.currentTarget.options.selectedIndex;
@@ -215,12 +211,6 @@
   priceOfOffer.setAttribute('required', 'required');
   priceOfOffer.setAttribute('max', MAX_PRICE + '');
 
-  var MIN_PRICES = {
-    bungalo: '0',
-    flat: '1000',
-    house: '5000',
-    palace: '10000',
-  };
 
   var typeOfOffer = adForm.querySelector('#type');
   var changeMinPrice = function () {

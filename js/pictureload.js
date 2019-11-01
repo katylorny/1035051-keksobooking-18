@@ -2,8 +2,6 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  // var divContainer = document.querySelector('.ad-form__photo-container');
-  // var upload = document.querySelector('.ad-form__upload');
   var PREVIEW_WIDTH = 70;
 
   // аватар
@@ -46,13 +44,8 @@
   photoPreviewDiv.append(img);
   photoPreviewDiv.style = 'overflow: hidden';
   var photoPreview = document.querySelector('.ad-form__photo img');
-  // не удаляю комментарии здесь в надежде доработать до множественной загрузки
-  // photoFileChooser.setAttribute('multiple', 'multiple');
+
   photoFileChooser.addEventListener('change', function () {
-    // if (photoPreviewDiv.querySelector('img')) {
-    //   var clone = photoPreviewDiv.cloneNode(true);
-    //   upload.insertAdjacentElement('afterend', clone);
-    // } else {}
     loadPicture(photoFileChooser, photoPreview);
   });
 

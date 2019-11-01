@@ -20,9 +20,9 @@
 
   var createFeaturesList = function (selectedFeatures) { // преимущества
     var popupFeatures = '';
-    for (var i = 0; i < selectedFeatures.length; i++) {
-      popupFeatures += '<li class="popup__feature popup__feature--' + selectedFeatures[i] + '"></li>';
-    }
+    selectedFeatures.forEach(function (element) {
+      popupFeatures += '<li class="popup__feature popup__feature--' + element + '"></li>';
+    });
     return popupFeatures;
   };
 
@@ -31,11 +31,11 @@
     while (popupPhotos.children[0]) {
       popupPhotos.removeChild(popupPhotos.children[0]);
     }
-    for (var j = 0; j < photosArray.length; j++) {
+    photosArray.forEach(function (element) {
       var popupClone = popupPhoto.cloneNode(true);
-      popupClone.src = photosArray[j];
+      popupClone.src = element;
       fragmentPhotos.appendChild(popupClone);
-    }
+    });
     return fragmentPhotos;
   };
 
